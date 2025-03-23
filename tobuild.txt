@@ -1,0 +1,8 @@
+to build it
+
+g++ main.cpp videostab.cpp -I/usr/include/opencv4 -I.  -lopencv_core -lopencv_calib3d -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_videoio -lopencv_video 
+
+- removed problematic includes/imports
+- used claude to tell me what was wrong with it
+- dropped out one of the libs that wouldnt link/find (-lopencv_xfeatures2d)
+- commented out the avi saving

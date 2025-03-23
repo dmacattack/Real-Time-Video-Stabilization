@@ -2,7 +2,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include "opencv2/features2d/features2d.hpp"
-#include "opencv2/nonfree/nonfree.hpp"
+// #include "opencv2/nonfree/nonfree.hpp"
 #include "opencv2/flann/flann.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
 #include <opencv2/opencv.hpp>
@@ -11,6 +11,9 @@
 #include <fstream>
 #include <time.h>
 #include <videostab.h>
+#include <opencv2/core/utility.hpp>
+#include <opencv2/core/core_c.h>
+#include <opencv2/videoio.hpp>  // For newer versions
 
 using namespace std;
 using namespace cv;
@@ -49,8 +52,8 @@ int main(int argc, char **argv)
 
     Mat smoothedMat(2,3,CV_64F);
 
-    VideoWriter outputVideo;
-    outputVideo.open("com.avi" , CV_FOURCC('X' , 'V' , 'I' , 'D'), 30 , frame_1.size());
+    // VideoWriter outputVideo;
+    // outputVideo.open("com.avi" , cv::VideoWriter::fourcc('X' , 'V' , 'I' , 'D'), 30 , frame_1.size());
 
     while(true)
     {
@@ -68,9 +71,9 @@ int main(int argc, char **argv)
 
             smoothedFrame = stab.stabilize(frame_1 , frame_2);
 
-            outputVideo.write(smoothedFrame);
+            // outputVideo.write(smoothedFrame);
 
-            imshow("Stabilized Video" , smoothedFrame);
+            // imshow("Stabilized Video" , smoothedFrame);
 
             waitKey(10);
 
