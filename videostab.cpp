@@ -6,7 +6,7 @@
 #define R1 0.5
 
 //To see the results of before and after stabilization simultaneously
-#define test 1
+#define test 0
 
 VideoStab::VideoStab()
 {
@@ -48,7 +48,7 @@ VideoStab::VideoStab()
 }
 
 //The main stabilization function
-Mat VideoStab::stabilize(Mat frame_1, Mat frame_2)
+Mat VideoStab::stabilize(Mat &frame_1, Mat &frame_2)
 {
     cvtColor(frame_1, frame1, COLOR_BGR2GRAY);
     cvtColor(frame_2, frame2, COLOR_BGR2GRAY);
@@ -142,7 +142,7 @@ Mat VideoStab::stabilize(Mat frame_1, Mat frame_2)
     resize(smoothedFrame, smoothedFrame, frame_2.size());
 
     //Change the value of test if you want to see both unstabilized and stabilized video
-    if(test)
+#if test
     {
         Mat canvas = Mat::zeros(frame_2.rows, frame_2.cols*2+10, frame_2.type());
 
@@ -156,7 +156,7 @@ Mat VideoStab::stabilize(Mat frame_1, Mat frame_2)
         }
         imshow("before and after", canvas);
     }
-
+#endif
     return smoothedFrame;
 
 }

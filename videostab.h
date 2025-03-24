@@ -70,7 +70,7 @@ public:
     double sum_transX ;
     double sum_transY ;
 
-    Mat stabilize(Mat frame_1 , Mat frame_2);
+    Mat stabilize(Mat &frame_1 , Mat &frame_2);
     void Kalman_Filter(double *scaleX , double *scaleY , double *thetha , double *transX , double *transY);
 };
 

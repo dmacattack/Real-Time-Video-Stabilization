@@ -73,7 +73,9 @@ int main(int argc, char **argv)
 
             // outputVideo.write(smoothedFrame);
 
-            // imshow("Stabilized Video" , smoothedFrame);
+            // show the output video
+            imshow("Stabilized Video" , smoothedFrame);
+
 
             waitKey(10);
 
