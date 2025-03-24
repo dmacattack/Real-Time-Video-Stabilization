@@ -14,6 +14,10 @@
 #include <opencv2/core/utility.hpp>
 #include <opencv2/core/core_c.h>
 #include <opencv2/videoio.hpp>  // For newer versions
+#include "matsender.h"
+
+// static MatUdpSender sender("192.168.1.198", 5000);
+MatUdpSender *sender = nullptr;
 
 using namespace std;
 using namespace cv;
@@ -55,6 +59,13 @@ int main(int argc, char **argv)
     // VideoWriter outputVideo;
     // outputVideo.open("com.avi" , cv::VideoWriter::fourcc('X' , 'V' , 'I' , 'D'), 30 , frame_1.size());
 
+    auto host = "192.168.1.198";
+    std::cout << "Initializing sender to host..." << host << std::endl;
+    sender = new MatUdpSender(host, 5000);
+    if (!sender->isInitialized && !sender->initialize()) {
+        return false;
+    }
+
     while(true)
     {
         try {
@@ -74,8 +85,9 @@ int main(int argc, char **argv)
             // outputVideo.write(smoothedFrame);
 
             // show the output video
-            imshow("Stabilized Video" , smoothedFrame);
-
+            // imshow("Stabilized Video" , smoothedFrame);
+            // send the frame
+            sender->sendFrame(smoothedFrame);
 
             waitKey(10);
 
