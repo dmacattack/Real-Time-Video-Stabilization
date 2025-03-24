@@ -59,7 +59,11 @@ int main(int argc, char **argv)
     // VideoWriter outputVideo;
     // outputVideo.open("com.avi" , cv::VideoWriter::fourcc('X' , 'V' , 'I' , 'D'), 30 , frame_1.size());
 
-    auto host = "192.168.1.198";
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <host>" << std::endl;
+        return -1;
+    }
+    auto host = argv[1];
     std::cout << "Initializing sender to host..." << host << std::endl;
     sender = new MatUdpSender(host, 5000);
     if (!sender->isInitialized && !sender->initialize()) {
