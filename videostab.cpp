@@ -61,7 +61,7 @@ Mat VideoStab::stabilize(Mat &frame_1, Mat &frame_2)
     vector <float> err;
 
     //Estimating the features in frame1 and frame2
-    goodFeaturesToTrack(frame1, features1, 200, 0.01  , 30 );
+    goodFeaturesToTrack(frame1 /*image*/, features1 /*corners*/, 200 /*maxcorners*/, 0.1 /*quality level*/, 30 /*minDistance*/ );
     calcOpticalFlowPyrLK(frame1, frame2, features1, features2, status, err );
 
     for(size_t i=0; i < status.size(); i++)
