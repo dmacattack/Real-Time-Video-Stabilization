@@ -16,11 +16,10 @@
 #include <opencv2/videoio.hpp>  // For newer versions
 #include "matsender.h"
 
-// static MatUdpSender sender("192.168.1.198", 5000);
-MatUdpSender *sender = nullptr;
-
 using namespace std;
 using namespace cv;
+
+MatUdpSender *sender = nullptr;
 
 // This class redirects cv::Exception to our process so that we can catch it and handle it accordingly.
 class cvErrorRedirector {
@@ -38,8 +37,21 @@ public:
 
 const int HORIZONTAL_BORDER_CROP = 30;
 
+void print_instructions(const char* ipAddr) {
+    printf("--------------------------------------------------------------------------------------\n");
+    printf("This program stabilizes a video stream from a camera.\n");
+    printf("   It assumes the video node is /dev/video0 \n");
+    printf("   To run: %s <ipaddress> \n", ipAddr);
+    printf("      <ipaddress> is the IP address of the receiver (eg: 192.168.2.1).\n");
+    printf("   The receiver can pickup the data with the pipeline: \n");
+    printf("      gst-launch-1.0 udpsrc port=5000 ! application/x-rtp,payload=26 ! rtpjpegdepay ! jpegdec ! videoconvert ! xvimagesink \n");
+    printf("--------------------------------------------------------------------------------------\n");
+}
+
 int main(int argc, char **argv)
 {
+    print_instructions(argv[0]);
+
     cvErrorRedirector redir;
     
     //Create a object of stabilization class
@@ -88,7 +100,7 @@ int main(int argc, char **argv)
 
             // outputVideo.write(smoothedFrame);
 
-            // show the output video
+            // show the output video (uncomment to see the stabilized video)
             // imshow("Stabilized Video" , smoothedFrame);
             // send the frame
             sender->sendFrame(smoothedFrame);
