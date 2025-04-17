@@ -20,3 +20,13 @@ The code requires the following 3rd Party Libraries
 
 #### Alternatively
 - The `Linux` branch of this repository includes a Makefile, run `make` to create the executable
+
+
+### April 9 2025
+
+* I did a build of the desktop code and cleaned it up, so i remember how to use it
+* I rebuilt witorch br2 so that i get a baseline on the opencv libs
+* I updated the makefile, and found I needed to allocate the PKG_CONFIG variable
+* It starts to build, but complains opencv_stitching is missing, so i added it 
+   * need to sideload
+* 

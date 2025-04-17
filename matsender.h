@@ -25,6 +25,7 @@ private:
     
     // Callback when buffer is no longer needed by GStreamer
     static void bufferDestroyCallback(gpointer data) {
+        (void)(data);
         // This is called when GStreamer is done with our buffer
         // Nothing to do here as we manage the cv::Mat separately
     }

@@ -165,6 +165,7 @@ void MatUdpSender::cleanup() {
 
 // Bus callback function
 gboolean MatUdpSender::busCallback(GstBus *bus, GstMessage *message, gpointer data) {
+    (void)(bus); // unused
     MatUdpSender *sender = static_cast<MatUdpSender*>(data);
     
     switch (GST_MESSAGE_TYPE(message)) {
