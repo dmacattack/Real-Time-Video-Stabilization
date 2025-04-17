@@ -1,0 +1,44 @@
+TOOLCHAIN_ROOT=/home/insp-dev2/buildroot/witorch/output/host/arm-buildroot-linux-gnueabihf
+SYSROOT=${TOOLCHAIN_ROOT}/sysroot
+CC=/opt/rockchip/output/host/bin/arm-buildroot-linux-gnueabihf-g++
+
+LDFLAGS=-Wl,-rpath-link,${SYSROOT}/lib:${SYSROOT}/usr/lib # AI has me add for glibc mismatch
+
+CFLAGS=-I${SYSROOT}/usr/include -I$(PWD)
+LIBS += -L${SYSROOT}/lib -L${SYSROOT}/usr/lib 
+# LIBS +=-lopencv_core -lopencv_calib3d -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_video
+LIBS += -ljpeg # needed by imgcodecs
+# LIBS += -lopencv_stitching # supposedly in core
+
+# pkg-config for gstreamer (exported so it doesnt use the host)
+# Explicitly set pkg-config for cross-compilation
+PKG_CONFIG_LIBDIR = /media/insp-dev2/DevelopmentShare/buildroot/witorch/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/pkgconfig:/media/insp-dev2/DevelopmentShare/buildroot/witorch/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/share/pkgconfig:/media/insp-dev2/DevelopmentShare/buildroot/witorch/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/lib/arm-buildroot-linux-gnueabihf/pkgconfig
+PKG_CONFIG_SYSROOT_DIR = /media/insp-dev2/DevelopmentShare/buildroot/witorch/output/host/arm-buildroot-linux-gnueabihf/sysroot
+PKG_CONFIG=/home/insp-dev2/buildroot/witorch/output/host/bin/pkg-config
+PKG_CONFIG_PATH=${SYSROOT}/usr/lib/pkgconfig/
+
+# Use the cross-compilation aware pkg-config invocation
+CFLAGS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --cflags gstreamer-1.0)
+LIBS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --libs gstreamer-1.0)
+
+CFLAGS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --cflags gstreamer-app-1.0)
+LIBS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --libs gstreamer-app-1.0)
+
+CFLAGS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --cflags opencv)
+LIBS+= $(shell $(PKG_CONFIG) --define-variable=sysroot=${SYSROOT} --libs opencv)
+
+SOURCES=main.cpp videostab.cpp matsender.cpp
+OBJECTS=$(patsubst %.cpp,build/%.o,$(SOURCES))
+EXECUTABLE=build-rk/videostab
+
+all: $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXECUTABLE) $(LIBS) $(LDFLAGS)
+
+build/%.o: %.cpp
+	@mkdir -p build build-rk
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf build/ build-rk/

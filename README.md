@@ -29,4 +29,6 @@ The code requires the following 3rd Party Libraries
 * I updated the makefile, and found I needed to allocate the PKG_CONFIG variable
 * It starts to build, but complains opencv_stitching is missing, so i added it 
    * need to sideload
-* 
+
+### April 16 2025
+* back up the makefile for witorch, IT ALMOST works, but it just so happens it works better in qt
