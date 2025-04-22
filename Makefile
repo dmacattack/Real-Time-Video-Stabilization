@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-I/usr/include/opencv4 -I$(PWD)
-LIBS=-lopencv_core -lopencv_calib3d -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_videoio -lopencv_video
+# LIBS=-lopencv_core -lopencv_calib3d -lopencv_imgcodecs -lopencv_highgui -lopencv_imgproc -lopencv_stitching -lopencv_videoio -lopencv_video
 
 
 # pkg-config for gstreamer
@@ -10,6 +10,9 @@ LIBS+= $(shell pkg-config --libs gstreamer-1.0)
 
 CFLAGS+= $(shell pkg-config --cflags gstreamer-app-1.0)
 LIBS+= $(shell pkg-config --libs gstreamer-app-1.0)
+
+CFLAGS+= $(shell pkg-config --cflags opencv4)
+LIBS+= $(shell pkg-config --libs opencv4)
 
 SOURCES=main.cpp videostab.cpp matsender.cpp
 OBJECTS=$(patsubst %.cpp,build/%.o,$(SOURCES))

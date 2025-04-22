@@ -32,3 +32,25 @@ The code requires the following 3rd Party Libraries
 
 ### April 16 2025
 * back up the makefile for witorch, IT ALMOST works, but it just so happens it works better in qt
+
+### April 21 2025
+* work with fakesinks to find the error
+* works
+``` c++
+"appsrc name=src format=time is-live=true ! "
+   "fakesink";
+```
+* works
+``` c++
+"appsrc name=src format=time is-live=true ! videoconvert ! video/x-raw,format=I420 ! jpegenc quality=85 ! fakesink"
+```
+
+* works
+``` c++
+"appsrc name=src format=time is-live=true ! videoconvert ! video/x-raw,format=I420 ! jpegenc quality=85 ! rtpjpegpay ! fakesink "
+```
+
+* I got it working, either my string concatenation with int was incorrect, or the sync=false was needed 
+* I reduced the complexity of kalman filter, and the number of corners for improved latency. 
+* WiTorch could be improved if the pipeline was tee'd and the translation pushed into existing pipeline
+* Ideally, opencv is the industry standard in this type of thing & there should be hw accelerators available 

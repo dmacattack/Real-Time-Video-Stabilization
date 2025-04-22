@@ -35,8 +35,6 @@ public:
     }
 };
 
-const int HORIZONTAL_BORDER_CROP = 30;
-
 void print_instructions(const char* ipAddr) {
     printf("--------------------------------------------------------------------------------------\n");
     printf("This program stabilizes a video stream from a camera.\n");
@@ -59,12 +57,16 @@ int main(int argc, char **argv)
 
     //Initialize the VideoCapture object
     VideoCapture cap(0);
+    cap.set(CAP_PROP_FRAME_WIDTH, 640);
+    cap.set(CAP_PROP_FRAME_HEIGHT, 480);
 
     Mat frame_2, frame2;
     Mat frame_1, frame1;
 
     cap >> frame_1;
     cvtColor(frame_1, frame1, COLOR_BGR2GRAY);
+
+    std::cout << "Frame width: " << frame_1.cols << ", Frame height: " << frame_1.rows << std::endl;
 
     Mat smoothedMat(2,3,CV_64F);
 
@@ -101,7 +103,7 @@ int main(int argc, char **argv)
             // outputVideo.write(smoothedFrame);
 
             // show the output video (uncomment to see the stabilized video)
-            // imshow("Stabilized Video" , smoothedFrame);
+            imshow("Stabilized Video" , smoothedFrame);
             // send the frame
             sender->sendFrame(smoothedFrame);
 

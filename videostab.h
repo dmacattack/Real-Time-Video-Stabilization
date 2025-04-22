@@ -2,76 +2,47 @@
 #define VIDEOSTAB_H
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/features2d.hpp>
 #include <iostream>
+
+#define HORIZONTAL_BORDER_CROP 20 // Horizontal border cropping amount
 
 using namespace cv;
 using namespace std;
+
+
 
 class VideoStab
 {
 public:
     VideoStab();
-    VideoCapture capture;
+    Mat stabilize(Mat &frame_1, Mat &frame_2);
 
-    Mat frame2;
-    Mat frame1;
+private:
+    // Current and previous frame in grayscale
+    Mat frame1, frame2;
 
+    // Transformation and smoothing matrices
+    Mat smoothedMat;
+
+    // Flag for first frame
     int k;
 
-    const int HORIZONTAL_BORDER_CROP = 30;
+    // Variables for accumulated and smoothed motion
+    float sumTransX, sumTransY;
+    float smoothX, smoothY;
 
-    Mat smoothedMat;
-    Mat affine;
+    // Kalman filter error variables
+    float errTransX, errTransY;
 
-    Mat smoothedFrame;
+    // Kalman filter process noise
+    float Q_transX, Q_transY;
 
-    double dx ;
-    double dy ;
-    double da ;
-    double ds_x ;
-    double ds_y ;
+    // Kalman filter measurement noise
+    float R_transX, R_transY;
 
-    double sx ;
-    double sy ;
-
-    double scaleX ;
-    double scaleY ;
-    double thetha ;
-    double transX ;
-    double transY ;
-
-    double diff_scaleX ;
-    double diff_scaleY ;
-    double diff_transX ;
-    double diff_transY ;
-    double diff_thetha ;
-
-    double errscaleX ;
-    double errscaleY ;
-    double errthetha ;
-    double errtransX ;
-    double errtransY ;
-
-    double Q_scaleX ;
-    double Q_scaleY ;
-    double Q_thetha ;
-    double Q_transX ;
-    double Q_transY ;
-
-    double R_scaleX ;
-    double R_scaleY ;
-    double R_thetha ;
-    double R_transX ;
-    double R_transY ;
-
-    double sum_scaleX ;
-    double sum_scaleY ;
-    double sum_thetha ;
-    double sum_transX ;
-    double sum_transY ;
-
-    Mat stabilize(Mat &frame_1 , Mat &frame_2);
-    void Kalman_Filter(double *scaleX , double *scaleY , double *thetha , double *transX , double *transY);
+    // Simplified Kalman filter function
+    void simpleKalmanFilter(float *transX, float *transY);
 };
 
 #endif // VIDEOSTAB_H
